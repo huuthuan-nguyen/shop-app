@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ProductDetailScreen extends StatelessWidget {
+  const ProductDetailScreen({Key? key}) : super(key: key);
   // final String title;
   // final double price;
 
@@ -12,7 +13,7 @@ class ProductDetailScreen extends StatelessWidget {
     final productId = ModalRoute.of(context)!.settings.arguments as String;
     return Scaffold(
       appBar: AppBar(
-        title: Text('title'),
+        title: const Text('title'),
       ),
     );
   }
