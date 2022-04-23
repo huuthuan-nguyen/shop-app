@@ -4,10 +4,7 @@ import 'package:shop_app/providers/products.dart';
 
 class ProductDetailScreen extends StatelessWidget {
   const ProductDetailScreen({Key? key}) : super(key: key);
-  // final String title;
-  // final double price;
 
-  // ProductDetailScreen(this.title, this.price);
   static const routeName = '/product-detail';
 
   @override
