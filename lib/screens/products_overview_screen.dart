@@ -6,9 +6,15 @@ enum FilterOptions {
   all,
 }
 
-class ProductsOverviewScreen extends StatelessWidget {
+class ProductsOverviewScreen extends StatefulWidget {
   const ProductsOverviewScreen({Key? key}) : super(key: key);
 
+  @override
+  State<ProductsOverviewScreen> createState() => _ProductsOverviewScreenState();
+}
+
+class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
+  bool _showOnlyFavorites = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,13 +40,18 @@ class ProductsOverviewScreen extends StatelessWidget {
               ),
             ],
             onSelected: (FilterOptions selectedValue) {
-              if (selectedValue == FilterOptions.favorites) {
-              } else {}
+              setState(() {
+                if (selectedValue == FilterOptions.favorites) {
+                  _showOnlyFavorites = true;
+                } else {
+                  _showOnlyFavorites = false;
+                }
+              });
             },
           ),
         ],
       ),
-      body: const ProductsGrid(),
+      body: ProductsGrid(_showOnlyFavorites),
     );
   }
 }
