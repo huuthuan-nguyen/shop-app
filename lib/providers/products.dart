@@ -50,7 +50,7 @@ class Products with ChangeNotifier {
   Future<void> addProduct(Product product) {
     Uri url = Uri.https(
         "shop-app-56898-default-rtdb.asia-southeast1.firebasedatabase.app",
-        "/products.json");
+        "/products");
     return http
         .post(url,
             body: json.encode({
@@ -70,6 +70,8 @@ class Products with ChangeNotifier {
       );
       _items.add(newProduct);
       notifyListeners();
+    }).catchError((error) {
+      throw error;
     });
   }
 
