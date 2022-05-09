@@ -47,11 +47,11 @@ class Products with ChangeNotifier {
     return _items.where((productItem) => productItem.isFavorite).toList();
   }
 
-  void addProduct(Product product) {
+  Future<void> addProduct(Product product) {
     Uri url = Uri.https(
         "shop-app-56898-default-rtdb.asia-southeast1.firebasedatabase.app",
         "/products.json");
-    http
+    return http
         .post(url,
             body: json.encode({
               "title": product.title,
