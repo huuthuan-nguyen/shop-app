@@ -62,7 +62,7 @@ class Products with ChangeNotifier {
               title: productData['title'],
               description: productData['description'],
               price: productData['price'],
-              isFavorite: productData['isFavorite'],
+              isFavorite: productData['isFavorite'] ?? false,
               imageUrl: productData['imageUrl']),
         );
       });
@@ -102,11 +102,25 @@ class Products with ChangeNotifier {
     }
   }
 
-  void updateProduct(String id, Product newProduct) {
+  Future<void> updateProduct(String id, Product newProduct) async {
     final prodIndex = _items.indexWhere((prod) => prod.id == id);
     if (prodIndex >= 0) {
-      _items[prodIndex] = newProduct;
-      notifyListeners();
+      Uri url = Uri.https(
+          "shop-app-56898-default-rtdb.asia-southeast1.firebasedatabase.app",
+          "/products/{$id}.json");
+      try {
+        await http.patch(url,
+            body: json.encode({
+              'title': newProduct.title,
+              'description': newProduct.description,
+              'imageUrl': newProduct.imageUrl,
+              'price': newProduct.price,
+            }));
+        _items[prodIndex] = newProduct;
+        notifyListeners();
+      } catch (error) {
+        rethrow;
+      }
     }
   }
 
