@@ -5,6 +5,7 @@ import 'package:shop_app/widgets/app_drawer.dart';
 import 'package:shop_app/widgets/products_grid.dart';
 import 'package:shop_app/widgets/badge.dart';
 import 'package:shop_app/providers/cart.dart';
+import 'package:shop_app/providers/products.dart';
 
 enum FilterOptions {
   favorites,
@@ -20,6 +21,25 @@ class ProductsOverviewScreen extends StatefulWidget {
 
 class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   bool _showOnlyFavorites = false;
+  var _isInit = true;
+  var _isLoading = false;
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      setState(() {
+        _isLoading = true;
+      });
+      Provider.of<Products>(context).fetchAndSetProducts().then((_) => {
+            setState(() {
+              _isLoading = false;
+            })
+          });
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,16 +52,16 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
             icon: const Icon(Icons.more_vert),
             itemBuilder: (_) => [
               const PopupMenuItem(
+                value: FilterOptions.favorites,
                 child: Text(
                   'Only Favorites',
                 ),
-                value: FilterOptions.favorites,
               ),
               const PopupMenuItem(
+                value: FilterOptions.all,
                 child: Text(
                   'Show All',
                 ),
-                value: FilterOptions.all,
               ),
             ],
             onSelected: (FilterOptions selectedValue) {
@@ -71,7 +91,11 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
         ],
       ),
       drawer: const AppDrawer(),
-      body: ProductsGrid(_showOnlyFavorites),
+      body: _isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : ProductsGrid(_showOnlyFavorites),
     );
   }
 }
