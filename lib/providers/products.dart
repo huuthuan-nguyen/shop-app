@@ -108,7 +108,7 @@ class Products with ChangeNotifier {
     if (prodIndex >= 0) {
       Uri url = Uri.https(
           "shop-app-56898-default-rtdb.asia-southeast1.firebasedatabase.app",
-          "/products/{$id}.json");
+          "/products/$id.json");
       try {
         await http.patch(url,
             body: json.encode({
@@ -128,7 +128,7 @@ class Products with ChangeNotifier {
   Future<void> deleteProduct(String id) async {
     Uri url = Uri.https(
         "shop-app-56898-default-rtdb.asia-southeast1.firebasedatabase.app",
-        "/products/{$id}.json");
+        "/products/$id.json");
     final existingProductIndex = _items.indexWhere((prod) => prod.id == id);
     Product? existingProduct = _items[existingProductIndex];
     _items.removeAt(existingProductIndex);
