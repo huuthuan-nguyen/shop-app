@@ -10,8 +10,6 @@ class Auth with ChangeNotifier {
   late DateTime _expiryDate;
   late String _userId;
 
-  get returnSecureToken => null;
-
   Future<void> signup(String email, String password) async {
     return _authenticate(email, password, "signUp");
   }
