@@ -84,8 +84,12 @@ class Products with ChangeNotifier {
 
   Future<void> addProduct(Product product) async {
     Uri url = Uri.https(
-        "shop-app-56898-default-rtdb.asia-southeast1.firebasedatabase.app",
-        "/products.json");
+      "shop-app-56898-default-rtdb.asia-southeast1.firebasedatabase.app",
+      "/products.json",
+      {
+        "auth": authToken,
+      },
+    );
     try {
       final response = await http.post(url,
           body: json.encode({
@@ -115,8 +119,12 @@ class Products with ChangeNotifier {
     final prodIndex = _items.indexWhere((prod) => prod.id == id);
     if (prodIndex >= 0) {
       Uri url = Uri.https(
-          "shop-app-56898-default-rtdb.asia-southeast1.firebasedatabase.app",
-          "/products/$id.json");
+        "shop-app-56898-default-rtdb.asia-southeast1.firebasedatabase.app",
+        "/products/$id.json",
+        {
+          "auth": authToken,
+        },
+      );
       try {
         await http.patch(url,
             body: json.encode({
@@ -135,8 +143,12 @@ class Products with ChangeNotifier {
 
   Future<void> deleteProduct(String id) async {
     Uri url = Uri.https(
-        "shop-app-56898-default-rtdb.asia-southeast1.firebasedatabase.app",
-        "/products/$id.json");
+      "shop-app-56898-default-rtdb.asia-southeast1.firebasedatabase.app",
+      "/products/$id.json",
+      {
+        "auth": authToken,
+      },
+    );
     final existingProductIndex = _items.indexWhere((prod) => prod.id == id);
     Product? existingProduct = _items[existingProductIndex];
     _items.removeAt(existingProductIndex);
