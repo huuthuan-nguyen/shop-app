@@ -6,6 +6,10 @@ import 'dart:core';
 import 'dart:convert';
 
 class Products with ChangeNotifier {
+  final String authToken;
+
+  Products(this.authToken, this._items);
+
   List<Product> _items = [
     // Product(
     //   id: 'p1',
@@ -49,9 +53,13 @@ class Products with ChangeNotifier {
   }
 
   Future<void> fetchAndSetProducts() async {
-    Uri url = Uri.https(
-        "shop-app-56898-default-rtdb.asia-southeast1.firebasedatabase.app",
-        "/products.json");
+    final Uri url = Uri.https(
+      "shop-app-56898-default-rtdb.asia-southeast1.firebasedatabase.app",
+      "/products.json",
+      {
+        "auth": authToken,
+      },
+    );
     try {
       final response = await http.get(url);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
