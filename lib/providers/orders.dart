@@ -21,16 +21,17 @@ class OrderItem {
 class Orders with ChangeNotifier {
   List<OrderItem> _orders = [];
   final String authToken;
+  final String userID;
   List<OrderItem> get orders {
     return [..._orders];
   }
 
-  Orders(this.authToken, this._orders);
+  Orders(this.authToken, this.userID, this._orders);
 
   Future<void> fetchAndSetOrders() async {
     Uri url = Uri.https(
       "shop-app-56898-default-rtdb.asia-southeast1.firebasedatabase.app",
-      "/orders.json",
+      "/orders/$userID.json",
       {
         "auth": authToken,
       },
@@ -64,7 +65,7 @@ class Orders with ChangeNotifier {
   Future<void> addOrder(List<CartItem> cartProducts, double total) async {
     Uri url = Uri.https(
       "shop-app-56898-default-rtdb.asia-southeast1.firebasedatabase.app",
-      "/orders.json",
+      "/orders/$userID.json",
       {
         "auth": authToken,
       },
