@@ -7,8 +7,9 @@ import 'dart:convert';
 
 class Products with ChangeNotifier {
   final String authToken;
+  final String userID;
 
-  Products(this.authToken, this._items);
+  Products(this.authToken, this.userID, this._items);
 
   List<Product> _items = [
     // Product(
@@ -53,7 +54,7 @@ class Products with ChangeNotifier {
   }
 
   Future<void> fetchAndSetProducts() async {
-    final Uri url = Uri.https(
+    Uri url = Uri.https(
       "shop-app-56898-default-rtdb.asia-southeast1.firebasedatabase.app",
       "/products.json",
       {
@@ -63,6 +64,15 @@ class Products with ChangeNotifier {
     try {
       final response = await http.get(url);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
+      url = Uri.https(
+        "shop-app-56898-default-rtdb.asia-southeast1.firebasedatabase.app",
+        "/userFavorites/$userID.json",
+        {
+          "auth": authToken,
+        },
+      );
+      final favoriteResponse = await http.get(url);
+      final favoriteData = json.decode(favoriteResponse.body);
       final List<Product> loadedProducts = [];
       extractedData.forEach((productID, productData) {
         loadedProducts.add(
@@ -71,7 +81,9 @@ class Products with ChangeNotifier {
               title: productData['title'],
               description: productData['description'],
               price: productData['price'],
-              isFavorite: productData['isFavorite'] ?? false,
+              isFavorite: favoriteData == null
+                  ? false
+                  : favoriteData[productID] ?? false,
               imageUrl: productData['imageUrl']),
         );
       });
@@ -97,7 +109,6 @@ class Products with ChangeNotifier {
             "description": product.description,
             "imageUrl": product.imageUrl,
             "price": product.price,
-            "isFavorite": product.isFavorite,
           }));
 
       final newProduct = Product(
