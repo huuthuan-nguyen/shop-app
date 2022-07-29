@@ -22,6 +22,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     description: "",
     price: 0,
     imageUrl: "",
+    userID: "",
   );
 
   Map<String, String> _initValues = <String, String>{
@@ -192,6 +193,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                           description: _editedProduct.description,
                           price: _editedProduct.price,
                           imageUrl: _editedProduct.imageUrl,
+                          userID: _editedProduct.userID,
                           isFavorite: _editedProduct.isFavorite,
                         );
                       },
@@ -229,6 +231,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                               ? 0.0
                               : (double.tryParse(value) ?? 0.0),
                           imageUrl: _editedProduct.imageUrl,
+                          userID: _editedProduct.userID,
                           isFavorite: _editedProduct.isFavorite,
                         );
                       },
@@ -257,6 +260,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                           description: value ?? "",
                           price: _editedProduct.price,
                           imageUrl: _editedProduct.imageUrl,
+                          userID: _editedProduct.userID,
                           isFavorite: _editedProduct.isFavorite,
                         );
                       },
@@ -321,6 +325,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                                 description: _editedProduct.description,
                                 price: _editedProduct.price,
                                 imageUrl: value ?? "",
+                                userID: _editedProduct.userID,
                                 isFavorite: _editedProduct.isFavorite,
                               );
                             },

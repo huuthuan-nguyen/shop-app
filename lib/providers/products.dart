@@ -53,13 +53,20 @@ class Products with ChangeNotifier {
     return _items.where((productItem) => productItem.isFavorite).toList();
   }
 
-  Future<void> fetchAndSetProducts() async {
+  Future<void> fetchAndSetProducts([bool filterByUser = false]) async {
+    final filterMap = filterByUser
+        ? {
+            "auth": authToken,
+            "orderBy": "\"creatorID\"",
+            "equalTo": "\"$userID\"",
+          }
+        : {
+            "auth": authToken,
+          };
     Uri url = Uri.https(
       "shop-app-56898-default-rtdb.asia-southeast1.firebasedatabase.app",
       "/products.json",
-      {
-        "auth": authToken,
-      },
+      filterMap,
     );
     try {
       final response = await http.get(url);
@@ -84,6 +91,7 @@ class Products with ChangeNotifier {
               isFavorite: favoriteData == null
                   ? false
                   : favoriteData[productID] ?? false,
+              userID: productData['creatorID'] ?? "",
               imageUrl: productData['imageUrl']),
         );
       });
@@ -109,6 +117,7 @@ class Products with ChangeNotifier {
             "description": product.description,
             "imageUrl": product.imageUrl,
             "price": product.price,
+            "creatorID": userID,
           }));
 
       final newProduct = Product(
@@ -117,6 +126,7 @@ class Products with ChangeNotifier {
         description: product.description,
         price: product.price,
         imageUrl: product.imageUrl,
+        userID: product.userID,
       );
 
       _items.add(newProduct);
